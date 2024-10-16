@@ -1,47 +1,41 @@
+from telegram import Update, Bot
 from telegram.ext import Application, CommandHandler, CallbackContext
-from telegram import Update
-import requests
-import re
-import asyncio
+import json
 
-def get_url():
-    contents = requests.get('https://random.dog/woof.json').json()    
-    url = contents['https://telegram.me/IbmecJrBot']
-    return url
+# Substitua 'YOUR_TOKEN' pelo token do seu bot
+TOKEN = '8023007888:AAFToZHpJMUvY5tX7vOalnk_GR-lLFn-h5I'
 
-def get_image_url():
-    allowed_extension = ['jpg','jpeg','png']
-    file_extension = ''
-    while file_extension not in allowed_extension:
-        url = get_url()
-        file_extension = re.search("([^.]*)$",url).group(1).lower()
-    return url
+# Lista global para armazenar usuários que aceitaram ser mencionados
+notified_users = set()
 
-def bop(bot, update):
-    url = get_image_url()
-    chat_id = update.message.chat_id
-    bot.send_photo(chat_id=chat_id, photo=url)
-
+# Função que responde ao comando /start
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text('Hello!')
-
-async def main():
-    application = Application.builder().token('7267610597:AAFv-mOthdzcqTglYV54QHM4w9UHtAzkw7U').build()
-    application.add_handler(CommandHandler('start', start))
-    await application.initialize()
-    await application.start()
-    async with application:
-        await application.updater.start_polling()
+    await update.message.reply_text('Ola, Use /all para marcar todos os membros do grupo.')
 
 
+# Função para mencionar uma lista manual de usernames
+async def mention_members(update: Update, context: CallbackContext) -> None:
+    # Carregar dados do arquivo JSON
+    with open('members.json', 'r') as file:
+        data = json.load(file)
+        members = data['Nome']
+    
+    mentions = [f'@{member}' for member in members]
+
+    if mentions:
+        await update.message.reply_text(' '.join(mentions))
+    else:
+        await update.message.reply_text('Não consegui encontrar membros para mencionar.')
+
+# Define a função principal
 if __name__ == '__main__':
-    try:
-        # Verifica se o loop já está rodando
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        # Se não houver loop rodando, cria um
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+    # Cria a aplicação com o token do bot
+    application = Application.builder().token(TOKEN).build()
 
-    # Executa a função main no loop existente
-    loop.run_until_complete(main())
+    # Adiciona os manipuladores de comandos
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("mention_members", mention_members))  # Comando para mencionar uma lista manual de usernames
+    application.add_handler(CommandHandler("diretoria", mention))  # Mencionar administradores
+
+    # Inicia a aplicação em modo de polling
+    application.run_polling()
