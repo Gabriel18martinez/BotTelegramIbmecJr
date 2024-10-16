@@ -5,7 +5,7 @@ import json
 # Substitua 'YOUR_TOKEN' pelo token do seu bot
 TOKEN = '8023007888:AAFToZHpJMUvY5tX7vOalnk_GR-lLFn-h5I'
 
-# Lista global para armazenar usuários que aceitaram ser mencionados
+# Lista global para armazenar usuários que aceitaram ser mencionadosgit
 notified_users = set()
 
 # Função que responde ao comando /start
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # Adiciona os manipuladores de comandos
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("mention_members", mention_members))  # Comando para mencionar uma lista manual de usernames
-    application.add_handler(CommandHandler("diretoria", mention))  # Mencionar administradores
+ 
 
     # Inicia a aplicação em modo de polling
     application.run_polling()
