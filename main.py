@@ -12,6 +12,9 @@ notified_users = set()
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text('Ola, Use /all para marcar todos os membros do grupo.')
 
+#Função para colocar os participantes do grupo na lista
+
+
 
 # Função para mencionar uma lista manual de usernames
 async def mention_members(update: Update, context: CallbackContext) -> None:
@@ -26,6 +29,8 @@ async def mention_members(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text(' '.join(mentions))
     else:
         await update.message.reply_text('Não consegui encontrar membros para mencionar.')
+
+
 
 # Define a função principal
 if __name__ == '__main__':
