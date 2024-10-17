@@ -1,9 +1,13 @@
+from dotenv import load_dotenv
+import os
 from telegram import Update, Bot
 from telegram.ext import Application, CommandHandler, CallbackContext
 import json
 
+load_dotenv()
+
 # Substitua 'YOUR_TOKEN' pelo token do seu bot
-TOKEN = '8023007888:AAFToZHpJMUvY5tX7vOalnk_GR-lLFn-h5I'
+TOKEN = os.getenv("TELEGRAM_KEY")
 
 # Lista global para armazenar usuários que aceitaram ser mencionadosgit
 notified_users = set()
