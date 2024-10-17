@@ -20,7 +20,7 @@ async def mention_members(update: Update, context: CallbackContext) -> None:
         data = json.load(file)
         members = data['Nome']
     
-    mentions = [f'@{member}' for member in members]
+    mentions = [f'@{str(member)}' for member in members]
 
     if mentions:
         await update.message.reply_text(' '.join(mentions))
